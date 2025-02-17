@@ -1,0 +1,7 @@
+{
+  "name": "pokemon-manager",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
