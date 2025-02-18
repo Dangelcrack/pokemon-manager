@@ -69,6 +69,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Archivos de entorno
+# Configuración de entorno
 src/environments/environment.prod.ts
 src/environments/environment.ts
