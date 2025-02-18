@@ -70,5 +70,5 @@ testem.log
 Thumbs.db
 
 # Archivos de entorno
-src\environments\environment.prod.ts
-src\environments\environment.ts
+src/environments/environment.prod.ts
+src/environments/environment.ts
