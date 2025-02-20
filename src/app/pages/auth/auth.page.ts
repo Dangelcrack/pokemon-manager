@@ -12,6 +12,7 @@ import { HeaderComponent } from 'src/app/shared/components/header/header.compone
 import { CustomInputComponent } from 'src/app/shared/components/custom-input/custom-input.component';
 import { addIcons } from 'ionicons';
 import {
+  personCircle,
   lockClosedOutline,
   mailOutline,
   personAddOutline,
@@ -54,6 +55,7 @@ export class AuthPage implements OnInit {
   
   constructor() {
     addIcons({
+      personCircle,
       mailOutline,
       lockClosedOutline,
       personAddOutline,
@@ -69,7 +71,7 @@ export class AuthPage implements OnInit {
     const loading = await this.utilsService.loading();
     await loading.present();
     this.firebaseService.signIn(this.form.value as User).then(res => {
-      console.log(res);
+      this.getUserInfo(res.user.uid);
     }).catch(error => {
       this.utilsService.presentToast({
         message: error.message,
@@ -81,5 +83,41 @@ export class AuthPage implements OnInit {
     }).finally(() => {
       loading.dismiss();
     })
+  }
+  async getUserInfo(uid: string) {
+    if (this.form.valid) {
+      const loading = await this.utilsService.loading();
+      await loading.present();
+
+      let path = `users/${uid}`;
+
+      this.firebaseService
+        .getDocument(path)
+        .then((userData: any) => {
+          const user : User = userData;
+          this.utilsService.saveInLocalStorage('user', user);
+          this.utilsService.presentToast({
+            color: "success",
+            duration: 1500,
+            message: `Sesión iniciada como ${user.name}`,
+            position: "middle",
+            icon : 'person-cicle-outline'
+          })
+          this.form.reset();
+          this.utilsService.routerLink('/home');
+        })
+        .catch((error) => {
+          this.utilsService.presentToast({
+            message: error.message,
+            duration: 2500,
+            color: 'danger',
+            position: 'middle',
+            icon: 'alert-circle-outline',
+          });
+        })
+        .finally(() => {
+          loading.dismiss();
+        });
+    }
   }
 }

@@ -1,4 +1,4 @@
-<app-header title="Registro"></app-header>
+<app-header title="Registro" backButtonURL="backButtonURL"></app-header>
 <ion-content>
   <div class="d-flex-center">
     <form [formGroup]="form" class="signup-form" (ngSubmit)="submit()">
@@ -61,6 +61,7 @@
       </div>
 
       <ion-button
+        (click)="submit()"
         mode="ios"
         expand="block"
         class="submit"

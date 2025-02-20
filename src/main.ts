@@ -11,7 +11,10 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { isDevMode } from '@angular/core';
+import { defineCustomElements} from '@ionic/pwa-elements/loader'
 
+//Call the element loader before the bootstrapModule/bootstrapAplication call
+defineCustomElements(window)
 
 bootstrapApplication(AppComponent, {
   providers: [
