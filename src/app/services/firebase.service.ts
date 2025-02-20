@@ -49,6 +49,10 @@ export class FirebaseService {
     window.location.reload();
   }
 
+  deleteDocument(path: string) {
+    return deleteDoc(doc(this.firestore, path));
+  }
+
   async getDocument(path: string) {
     const docSnap = await getDoc(doc(this.firestore,path));
     return docSnap.data();
@@ -58,9 +62,13 @@ export class FirebaseService {
     return addDoc(collection(this.firestore, path),data)
   }
 
+  updateDocument(path: string,data: any){
+    return updateDoc (doc(this.firestore, path),data)
+  }
+
   async getCollectionData(path: string, collectionQuery? :any){
     const ref = collection(this.firestore,path)
-    return collectionData(query(ref,collectionQuery))
+    return collectionData(query(ref,collectionQuery),{idField: 'id'})
 
   }
 
@@ -86,5 +94,13 @@ export class FirebaseService {
     return uploadString(ref(this.storage,path), ImageDataUrl,"data_url").then(() =>{
       return getDownloadURL(ref(this.storage,path))
     })
+  }
+
+  async getFilePath(url:string){
+    return ref(this.storage,url).fullPath
+  }
+
+  async deleteImage(path: string){
+    return deleteObject(ref(this.storage,path))
   }
 }

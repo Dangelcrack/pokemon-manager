@@ -6,6 +6,8 @@ import {
   ToastOptions,
   ModalController,
   ModalOptions,
+  AlertController,
+  AlertOptions,
 } from '@ionic/angular/standalone';
 import { Camera, CameraResultType, CameraSource} from '@capacitor/camera';
 
@@ -17,6 +19,7 @@ export class UtilsService {
   toastController = inject(ToastController);
   router = inject(Router);
   modalController = inject(ModalController);
+  alertController = inject(AlertController);
 
   loading() {
     return this.loadingController.create({ spinner: 'crescent' });
@@ -65,8 +68,15 @@ export class UtilsService {
       promptLabelPicture : "Saca una foto"
     });
   }
-  getLocalStorageUser(){
-    return this.getFromLocalStorage('user')
+  getLocalStorageUser() {
+    return this.getFromLocalStorage('user');
   }
+
+  async presentAlert(alertOptions?: AlertOptions | undefined) {
+    const alert = await this.alertController.create(alertOptions);
+
+    await alert.present();
+  }
+
   constructor() {}
 }

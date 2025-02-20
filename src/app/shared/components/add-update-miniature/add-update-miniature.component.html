@@ -1,4 +1,4 @@
-<app-header title="Añadir / Editar miniatura" [isModal]="true"></app-header>
+<app-header [title]="miniature? 'Editar miniatura': 'Añadir miniatura'" [isModal]="true"></app-header>
 <ion-content>
   <div class="d-flex-center">
     <form [formGroup]="form" class="ion-padding ion-text-center">
@@ -47,7 +47,7 @@
       </div>
 
       <ion-button (click)="submit()" mode="ios" expand="block" class="submit" type="submit" [disabled]="form.invalid">
-        Aregar miniatura
+        {{miniature? 'Editar miniatura': 'Añadir miniatura'}}
         <ion-icon slot="end" name="body-outline"></ion-icon>
       </ion-button>
     </form>

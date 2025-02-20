@@ -81,5 +81,4 @@ export class SupabaseService {
         return false;
       }
     }
-
 }
