@@ -10,6 +10,7 @@ import {
 import {
   IonContent,
   IonIcon,
+  IonAvatar
 } from '@ionic/angular/standalone';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { CustomInputComponent } from 'src/app/shared/components/custom-input/custom-input.component';
@@ -20,6 +21,7 @@ import {
   bodyOutline,
   personOutline,
   alertCircleOutline,
+  imageOutline
 } from 'ionicons/icons';
 import { IonButton } from '@ionic/angular/standalone';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -39,6 +41,7 @@ import { UtilsService } from 'src/app/services/utils.service';
       CustomInputComponent,
       ReactiveFormsModule,
       IonButton,
+      IonAvatar,
     ],
 })
 export class AddUpdateMiniatureComponent  implements OnInit {
@@ -61,7 +64,15 @@ form = new FormGroup({
       bodyOutline,
       personOutline,
       alertCircleOutline,
+      imageOutline
     });
+  }
+
+  async takeImage(){
+    const dataUrl = (await this.utilsService.takePicture("Imagen de la miniatura")).dataUrl
+    if(dataUrl){
+      this.form.controls.image.setValue(dataUrl);
+    }
   }
 
   ngOnInit() {}

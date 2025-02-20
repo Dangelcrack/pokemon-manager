@@ -7,6 +7,7 @@ import {
   ModalController,
   ModalOptions,
 } from '@ionic/angular/standalone';
+import { Camera, CameraResultType, CameraSource} from '@capacitor/camera';
 
 @Injectable({
   providedIn: 'root',
@@ -52,6 +53,17 @@ export class UtilsService {
 
   dissmissModal(data?: any) {
     return this.modalController.dismiss(data);
+  }
+  async takePicture(promptLabelHeader : string){
+    return await Camera.getPhoto({
+      quality:90,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl,
+      source : CameraSource.Prompt,
+      promptLabelHeader,
+      promptLabelPhoto : "Seleccione una imagen",
+      promptLabelPicture : "Saca una foto"
+    });
   }
   constructor() {}
 }

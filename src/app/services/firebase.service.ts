@@ -1,7 +1,11 @@
-import { Injectable, inject } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, UserCredential, sendPasswordResetEmail } from '@angular/fire/auth';
+import { Directive, inject, Injectable } from '@angular/core';
+import { Auth, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateProfile, UserCredential } from '@angular/fire/auth';
 import { User } from '../models/user.model';
-import { Firestore, setDoc, doc, getDoc } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc, addDoc, collection, collectionData, query, updateDoc, deleteDoc, QueryConstraint, orderBy, limit } from '@angular/fire/firestore';
+import { UnsubscriptionError } from 'rxjs';
+import { deleteObject, uploadString } from '@firebase/storage';
+import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
+
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +13,7 @@ import { Firestore, setDoc, doc, getDoc } from '@angular/fire/firestore';
 export class FirebaseService {
   auth = inject(Auth);
   firestore = inject(Firestore);
+  storage = inject(Storage)
 
   signIn(user: User): Promise<UserCredential> {
     return signInWithEmailAndPassword(
@@ -49,6 +54,10 @@ export class FirebaseService {
     return docSnap.data();
   }
 
+  addDocument(path: string,data: any){
+    return addDoc(collection(this.firestore, path),data)
+  }
+
   setDocument(path: string, data: any) {
     return setDoc(doc(this.firestore, path), data);
   }
@@ -65,5 +74,11 @@ export class FirebaseService {
       });
     });
     return userExists;
+  }
+
+  async uploadImage(path: string, ImageDataUrl:string){
+    return uploadString(ref(this.storage,path), ImageDataUrl,"data_url").then(() =>{
+      return getDownloadURL(ref(this.storage,path))
+    })
   }
 }
