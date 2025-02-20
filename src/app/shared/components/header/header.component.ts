@@ -21,7 +21,7 @@ export class HeaderComponent  implements OnInit {
   ngOnInit() {}
 
   dismissModal(){
-    this.utilsService.dissmissModal();
+    this.utilsService.dismissModal();
   }
 
 }

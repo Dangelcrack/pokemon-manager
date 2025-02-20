@@ -58,6 +58,12 @@ export class FirebaseService {
     return addDoc(collection(this.firestore, path),data)
   }
 
+  async getCollectionData(path: string, collectionQuery? :any){
+    const ref = collection(this.firestore,path)
+    return collectionData(query(ref,collectionQuery))
+
+  }
+
   setDocument(path: string, data: any) {
     return setDoc(doc(this.firestore, path), data);
   }

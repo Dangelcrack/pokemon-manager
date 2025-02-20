@@ -4,14 +4,19 @@
 
 export const environment = {
   production: false,
-  firebaseConfig : {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
-},
+  firebaseConfig: {
+    apiKey: '',
+    authDomain: '',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: '',
+    appId: '',
+  },
+  supabaseConfig: {
+    projectURl: "",
+    apiKey: "",
+    bucket: ""
+  }
 };
 
 /*

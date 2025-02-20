@@ -51,7 +51,7 @@ export class UtilsService {
     return data ?? null;
   }
 
-  dissmissModal(data?: any) {
+  dismissModal(data?: any) {
     return this.modalController.dismiss(data);
   }
   async takePicture(promptLabelHeader : string){
@@ -64,6 +64,9 @@ export class UtilsService {
       promptLabelPhoto : "Seleccione una imagen",
       promptLabelPicture : "Saca una foto"
     });
+  }
+  getLocalStorageUser(){
+    return this.getFromLocalStorage('user')
   }
   constructor() {}
 }

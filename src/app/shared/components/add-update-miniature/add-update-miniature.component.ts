@@ -21,12 +21,14 @@ import {
   bodyOutline,
   personOutline,
   alertCircleOutline,
-  imageOutline
+  imageOutline,
+  checkmarkCircleOutline
 } from 'ionicons/icons';
 import { IonButton } from '@ionic/angular/standalone';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { User } from 'src/app/models/user.model';
 import { UtilsService } from 'src/app/services/utils.service';
+import { SupabaseService } from 'src/app/services/supabase.service';
 
 @Component({
   selector: 'app-add-update-miniature',
@@ -46,17 +48,21 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class AddUpdateMiniatureComponent  implements OnInit {
 
+;
+
+  firebaseService = inject(FirebaseService);
+  utilsService = inject(UtilsService);
+  supabaseService = inject(SupabaseService)
+  user : User = {} as User;
+
+
 form = new FormGroup({
     id: new FormControl(''),
     name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     image: new FormControl('', [Validators.required]),
     units: new FormControl('', [Validators.required, Validators.minLength(1)]),
     basepoints: new FormControl('', [Validators.required, Validators.minLength(1)]),
-  });
-
-  firebaseService = inject(FirebaseService);
-  utilsService = inject(UtilsService);
-
+  })
   constructor() {
     addIcons({
       mailOutline,
@@ -64,7 +70,8 @@ form = new FormGroup({
       bodyOutline,
       personOutline,
       alertCircleOutline,
-      imageOutline
+      imageOutline,
+      checkmarkCircleOutline
     });
   }
 
@@ -75,29 +82,40 @@ form = new FormGroup({
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.user = this.utilsService.getLocalStorageUser();
+  }
   async submit() {
-    if (this.form.valid) {
-      const loading = await this.utilsService.loading();
-      await loading.present();
-      this.firebaseService
-        .signUp(this.form.value as User)
-        .then(async (res) => {
-          this.firebaseService.updateUser(this.form.value.name!);
-          let uid = res.user!.uid;
-        })
-        .catch((error) => {
-          this.utilsService.presentToast({
-            message: error.message,
-            duration: 2500,
-            color: 'danger',
-            position: 'middle',
-            icon: 'alert-circle-outline',
-          });
-        })
-        .finally(() => {
-          loading.dismiss();
-        });
+    const loading = await this.utilsService.loading();
+    await loading.present();
+
+    const path: string = `users/${this.user.uid}/miniatures`
+
+    const imageDataUrl = this.form.value.image;
+    const imagePath = `${this.user.uid}/${Date.now()}`
+    const imageUrl = await this.supabaseService.uploadImage(imagePath, imageDataUrl!)
+    this.form.controls.image.setValue(imageUrl)
+    delete this.form.value.id;
+
+    this.firebaseService.addDocument(path, this.form.value).then(res => {
+      this.utilsService.dismissModal({ success: true });
+      this.utilsService.presentToast({
+        color: "success",
+        duration: 1500,
+        message: "Miniatura añadida exitosamente",
+        position: "middle",
+        icon: 'checkmark-circle-outline'
+      })
+    }).catch(error => {
+      this.utilsService.presentToast({
+        color: "danger",
+        duration: 2500,
+        message: error.message,
+        position: "middle",
+        icon: 'alert-circle-outline'
+      })
+    }).finally(() => {
+      loading.dismiss();
+    })
     }
   }
-}
