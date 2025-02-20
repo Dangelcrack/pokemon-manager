@@ -6,6 +6,10 @@ import { UnsubscriptionError } from 'rxjs';
 import { deleteObject, uploadString } from '@firebase/storage';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 
+export interface CollectionQuery {
+  orderBy?: { field: string, direction: 'asc' | 'desc' };
+  limit?: number;
+}
 
 @Injectable({
   providedIn: 'root',

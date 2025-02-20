@@ -1,7 +1,7 @@
 <app-header title = "Inicio"></app-header>
 <ion-content>
   
-  <ion-list>
+  <ion-list *ngIf="!loading">
     <ion-item-sliding *ngFor="let miniature of miniatures" class="miniature-item">
       <ion-item>
         <ion-avatar slot="start">
@@ -26,6 +26,24 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
+
+  <ion-list *ngIf="loading"  class="miniatures-list">
+    <ion-item *ngFor="let i of [1, 1, 1, 1, 1, 1, 1, 1]" class="miniature-item">
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated style="width: 100%; height: 100%"></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label style="width: 50%">
+          <div><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></div>
+          <div><ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></div>
+        </ion-label>
+      </ion-item>
+  </ion-list>
+
+  <div *ngIf="!loading && this.miniatures.length == 0" class="empty">
+    <ion-icon name="body-outline"></ion-icon>
+    <h3>Aún no has agregado ninguna miniatura</h3>
+  </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addUpdateMiniature()">
