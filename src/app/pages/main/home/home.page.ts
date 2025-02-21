@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonIcon, IonLabel, IonItem, IonItemSliding, IonList, IonItemOptions, IonItemOption, IonAvatar, IonContent, IonFab, IonFabButton, IonSkeletonText } from '@ionic/angular/standalone';
+import { IonIcon, IonLabel, IonItem, IonItemSliding, IonList, IonItemOptions, IonItemOption, IonAvatar, IonContent, IonFab, IonFabButton, IonSkeletonText, IonRefresher, IonRefresherContent, RefresherEventDetail } from '@ionic/angular/standalone';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { HeaderComponent } from "../../../shared/components/header/header.component";
@@ -11,22 +11,26 @@ import { AddUpdateMiniatureComponent } from 'src/app/shared/components/add-updat
 import { Miniature } from 'src/app/models/miniature.model';
 import { SupabaseService } from 'src/app/services/supabase.service';
 import { User } from 'firebase/auth';
+import { QueryOptions } from 'src/app/services/query-options.interface';
+import { IonRefresherCustomEvent } from '@ionic/core';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonSkeletonText,  IonAvatar, IonItemOption, IonItemOptions, IonList, IonItemSliding, IonItem, IonLabel, IonIcon, IonFabButton, IonFab, IonContent, CommonModule, FormsModule, HeaderComponent]
+  imports: [IonRefresherContent, IonRefresher, IonSkeletonText, IonAvatar, IonItemOption, IonItemOptions, IonList, IonItemSliding, IonItem, IonLabel, IonIcon, IonFabButton, IonFab, IonContent, CommonModule, FormsModule, HeaderComponent]
 })
 export class HomePage implements OnInit {
+
   firebaseService = inject(FirebaseService);
   utilsService = inject(UtilsService);
   supabaseService = inject(SupabaseService);
   miniatures: Miniature[] = [];
   loading: boolean = false;
-  constructor() { addIcons({createOutline,trashOutline,alertCircleOutline,add,bodyOutline}); }
+  constructor() { addIcons({ createOutline, trashOutline, alertCircleOutline, add, bodyOutline }); }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   // signOut() {
   //   this.firebaseService.signOut().then(() => {
@@ -34,32 +38,46 @@ export class HomePage implements OnInit {
   //   });
   // }
 
-  async getMiniatures(){
+  async getMiniatures() {
     this.loading = true;
     const user = this.utilsService.getLocalStorageUser();
-    const path : string = `users/${user.uid}/miniatures`;
+    const path: string = `users/${user.uid}/miniatures`;
+    const queryOptions: QueryOptions = { orderBy: { field: "basepoints", direction: "asc" } };
 
-    let sub = (await this.firebaseService.getCollectionData(path)).subscribe({
-      next: (res : any) => {
+    let timer: any;
+
+    const resetTimer = () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
         sub.unsubscribe();
+      }, 5000)
+    };
+
+
+
+    let sub = (await this.firebaseService.getCollectionData(path, queryOptions)).subscribe({
+      next: (res: any) => {
         this.miniatures = res;
         this.loading = false;
+        resetTimer();
       },
     });
   }
 
-  async addUpdateMiniature( miniature?: Miniature){
-    let success = await this.utilsService.presentModal({component: AddUpdateMiniatureComponent, cssClass : "add-update-modal", componentProps: {miniature}});
-    if(success){
+  async addUpdateMiniature(miniature?: Miniature) {
+    let success = await this.utilsService.presentModal({ component: AddUpdateMiniatureComponent, cssClass: "add-update-modal", componentProps: { miniature } });
+    if (success) {
       this.getMiniatures();
     }
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.getMiniatures();
   }
 
-  confirmDeleteMiniature(miniature: Miniature){
+  confirmDeleteMiniature(miniature: Miniature) {
     this.utilsService.presentAlert({
       header: "Eliminar miniatura",
       message: "¿Estás seguro de que deseas eliminar esta miniatura?",
@@ -72,12 +90,12 @@ export class HomePage implements OnInit {
             this.deleteMiniature(miniature);
           }
         }
-    ]
-  });
-}
+      ]
+    });
+  }
 
 
-  async deleteMiniature(miniature: Miniature){
+  async deleteMiniature(miniature: Miniature) {
     const loading = await this.utilsService.loading();
     await loading.present();
     const user: User = this.utilsService.getLocalStorageUser();
@@ -103,7 +121,13 @@ export class HomePage implements OnInit {
         icon: "alert-circle-outline"
       })
     }).finally(() => {
-      loading.dismiss(); 
+      loading.dismiss();
     });
-    }
+  }
+  doRefresh($event: any) {
+    setTimeout(() => {
+      this.getMiniatures();
+      $event.target.complete();
+    }, 2000);
+  }
 }

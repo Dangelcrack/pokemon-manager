@@ -5,11 +5,7 @@ import { doc, Firestore, getDoc, setDoc, addDoc, collection, collectionData, que
 import { UnsubscriptionError } from 'rxjs';
 import { deleteObject, uploadString } from '@firebase/storage';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
-
-export interface CollectionQuery {
-  orderBy?: { field: string, direction: 'asc' | 'desc' };
-  limit?: number;
-}
+import { QueryOptions } from './query-options.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -70,9 +66,23 @@ export class FirebaseService {
     return updateDoc (doc(this.firestore, path),data)
   }
 
-  async getCollectionData(path: string, collectionQuery? :any){
+  buildQueryConstraints(options: QueryOptions) : QueryConstraint[] {
+    const constraints: QueryConstraint[] = [];
+    if (options.orderBy) {
+      constraints.push(orderBy(options?.orderBy.field, options?.orderBy.direction));
+    }
+    if (options.limit) {
+      limit(options?.limit);
+    }
+    return constraints;
+  }
+
+
+
+  async getCollectionData(path: string, collectionQuery? :QueryOptions){
     const ref = collection(this.firestore,path)
-    return collectionData(query(ref,collectionQuery),{idField: 'id'})
+    const constraints = this.buildQueryConstraints(collectionQuery || {})
+    return collectionData(query(ref,...constraints),{idField: 'id'})
 
   }
 
