@@ -12,6 +12,6 @@ export const noauthGuard: CanActivateFn = async (route, state) => {
   if (!isAuthenticated){
     return true;
   }else {
-    return utilsService.urlTree('/home')
+    return utilsService.urlTree('/main/home')
   }
 };

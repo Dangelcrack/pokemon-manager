@@ -13,6 +13,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
   if ( isAuthenticated && localStorageUser){
     return true;
   }else {
+    firebaseService.signOut();
     return utilsService.urlTree('/auth')
   }
 };

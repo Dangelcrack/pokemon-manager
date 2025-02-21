@@ -84,33 +84,34 @@ export class AuthPage implements OnInit {
       loading.dismiss();
     })
   }
+  
   async getUserInfo(uid: string) {
     if (this.form.valid) {
       const loading = await this.utilsService.loading();
       await loading.present();
 
-      let path = `users/${uid}`;
+      let path: string = `users/${uid}`;
 
       this.firebaseService
         .getDocument(path)
         .then((userData: any) => {
-          const user : User = userData;
+          const user: User = userData;
           this.utilsService.saveInLocalStorage('user', user);
           this.utilsService.presentToast({
-            color: "success",
+            color: 'success',
             duration: 1500,
             message: `Sesión iniciada como ${user.name}`,
-            position: "middle",
-            icon : 'person-cicle-outline'
-          })
+            position: 'middle',
+            icon: 'person-circle-outline',
+          });
           this.form.reset();
-          this.utilsService.routerLink('/home');
+          this.utilsService.routerLink('/main/home');
         })
         .catch((error) => {
           this.utilsService.presentToast({
-            message: error.message,
-            duration: 2500,
             color: 'danger',
+            duration: 2500,
+            message: error.message,
             position: 'middle',
             icon: 'alert-circle-outline',
           });
