@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonAvatar, IonButton, IonCol, IonIcon, IonLabel, IonItem } from '@ionic/angular/standalone';
+import { IonContent,  IonAvatar, IonButton, IonIcon, IonLabel, IonItem } from '@ionic/angular/standalone';
 import { UtilsService } from 'src/app/services/utils.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { SupabaseService } from 'src/app/services/supabase.service';
@@ -15,7 +15,7 @@ import { cameraOutline, personOutline, personCircleOutline } from 'ionicons/icon
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [IonItem, IonLabel, IonIcon, IonCol, IonButton, IonAvatar, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, HeaderComponent]
+  imports: [IonItem, IonLabel, IonIcon, IonButton, IonAvatar, IonContent, CommonModule, FormsModule, HeaderComponent]
 })
 export class ProfilePage implements OnInit {
 
