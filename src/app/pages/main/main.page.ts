@@ -5,7 +5,8 @@ import { addIcons } from 'ionicons';
 import {
   IonContent,
   IonMenu,
-  IonMenuToggle, IonLabel, IonItem, IonIcon, IonRouterOutlet, IonTitle, IonFooter, IonToolbar, IonAvatar } from '@ionic/angular/standalone';
+  IonMenuToggle, IonLabel, IonItem, IonIcon, IonRouterOutlet, IonFooter
+} from '@ionic/angular/standalone';
 import { homeOutline, personOutline, logOutOutline, personCircleOutline, hardwareChipOutline } from 'ionicons/icons';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { HeaderComponent } from "../../shared/components/header/header.component";
@@ -18,7 +19,7 @@ import { User } from 'src/app/models/user.model';
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [IonAvatar, IonFooter, IonRouterOutlet, IonIcon, IonItem, IonLabel,
+  imports: [IonFooter, IonRouterOutlet, IonIcon, IonItem, IonLabel,
     IonContent,
     CommonModule,
     FormsModule,
@@ -51,14 +52,15 @@ export class MainPage implements OnInit {
   user: User;
 
   constructor() {
-    addIcons({personCircleOutline,logOutOutline,personOutline,homeOutline, hardwareChipOutline});
+    addIcons({ personCircleOutline, logOutOutline, personOutline, homeOutline, hardwareChipOutline });
     this.user = this.utilsService.getLocalStorageUser()!;
   }
 
-  ngOnInit() {  }
+  ngOnInit() { }
 
   signOut() {
-    this.firebaseService.signOut().then(() => {this.utilsService.routerLink("/auth");
+    this.firebaseService.signOut().then(() => {
+      this.utilsService.routerLink("/auth");
     });
   }
 }

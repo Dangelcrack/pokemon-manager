@@ -23,4 +23,19 @@
       <p>Gamma: {{ this.orientationData.gamma | number:'1.1-1' }}</p>
     </ion-card-content>
   </ion-card>
+
+  <!-- Botones para probar Haptics -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Haptics</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button (click)="triggerHapticsImpactMedium()">Impacto Medio</ion-button>
+      <ion-button (click)="triggerHapticsImpactLight()">Impacto Ligero</ion-button>
+      <ion-button (click)="triggerHapticsVibrate()">Vibrar</ion-button>
+      <ion-button (click)="triggerHapticsSelectionStart()">Iniciar Selección</ion-button>
+      <ion-button (click)="triggerHapticsSelectionChanged()">Cambiar Selección</ion-button>
+      <ion-button (click)="triggerHapticsSelectionEnd()">Detener Selección</ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
