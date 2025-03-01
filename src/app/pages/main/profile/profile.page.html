@@ -1,16 +1,20 @@
 <app-header title="Perfil" [showMenuButton]="true"></app-header>
 <ion-content class="ion-padding-top ion-text-center">
+  <!-- Avatar para mostrar la imagen del usuario -->
   <ion-avatar>
     <img *ngIf="user.image" [src]="user.image" />
     <ion-icon *ngIf="!user.image" class="empty-icon" name="person-circle-outline"></ion-icon>
   </ion-avatar>
+  <!-- Botón para tomar o seleccionar una nueva imagen -->
   <ion-button class="photo-btn" (click)="takeImage()" size="small" shape="round" mode="ios">
     <ion-icon name="camera-outline"></ion-icon>
   </ion-button>
 
-  <h2>{{user.name}}</h2>
+  <!-- Nombre del usuario -->
+  <h2>{{ user.name }}</h2>
 
-  <ion-item button detail>
+  <!-- Botón para editar el perfil y guardar los cambios -->
+  <ion-item button detail (click)="updateProfile()">
     <ion-icon color="primary" name="person-outline" slot="start"></ion-icon>
     <ion-label>Editar perfil</ion-label>
   </ion-item>

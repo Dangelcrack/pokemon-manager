@@ -1,4 +1,4 @@
-<app-header [title]="miniature? 'Editar miniatura': 'Añadir miniatura'" [isModal]="true"></app-header>
+<app-header [title]="miniature ? 'Editar miniatura' : 'Añadir miniatura'" [isModal]="true"></app-header>
 <ion-content>
   <div class="d-flex-center">
     <form [formGroup]="form" class="ion-padding ion-text-center">
@@ -8,46 +8,30 @@
       <ion-icon name="image-outline" class="image-icon" *ngIf="!form.value.image"></ion-icon>
       <br/>
       <ion-button (click)="takeImage()" size="small" mode="ios" shape="round">
-        Tomar/Seleccionar
+        Tomar/Seleccionar Imagen
       </ion-button>
 
-      <app-custom-input autocomplete="name" [control]="form.controls.name" type="text"
-        label="Nombre"></app-custom-input>
+      <app-custom-input autocomplete="name" [control]="form.controls.name" type="text" label="Nombre"></app-custom-input>
+      <app-custom-input autocomplete="type" [control]="form.controls.type" type="text" label="Tipos"></app-custom-input>
 
       <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
-        <div *ngIf="form.controls.name.errors?.['required']">
-          Debe especificar un nombre
-        </div>
-        <div *ngIf="form.controls.name.errors?.['minlength']">
-          El nombre debe tener al menos 4 caracteres
-        </div>
-      </div>
-      <app-custom-input [control]="form.controls.units" type="number" label="Unidades"></app-custom-input>
-
-      <div class="validators" *ngIf="form.controls.units.errors && form.controls.units.touched">
-        <div *ngIf="form.controls.units.errors?.['required']">
-          Debe especificar una cantidad de miniaturas
-        </div>
-        <div *ngIf="form.controls.units.errors?.['min']">
-          La cantidad debe ser mayor de uno.
-        </div>
+        <div *ngIf="form.controls.name.errors?.['required']">Debe especificar un nombre</div>
+        <div *ngIf="form.controls.name.errors?.['minlength']">El nombre debe tener al menos 4 caracteres</div>
       </div>
 
-      <app-custom-input [control]="form.controls.basepoints" type="number" label="Puntos Base"></app-custom-input>
-
-      <div class="validators" *ngIf="
-          form.controls.basepoints.errors && form.controls.basepoints.touched
-        ">
-        <div *ngIf="form.controls.basepoints.errors?.['required']">
-          Debe especificar una cantidad de puntos base
-        </div>
-        <div *ngIf="form.controls.basepoints.errors?.['min']">
-          Los puntos base deben ser mayor de uno.
-        </div>
+      <div class="validators" *ngIf="form.controls.type.errors && form.controls.type.touched">
+        <div *ngIf="form.controls.type.errors?.['required']">Debe especificar un tipo</div>
       </div>
+
+      <app-custom-input [control]="form.controls.hp" type="number" label="Puntos de Vida"></app-custom-input>
+      <app-custom-input [control]="form.controls.attack" type="number" label="Ataque"></app-custom-input>
+      <app-custom-input [control]="form.controls.defense" type="number" label="Defensa"></app-custom-input>
+      <app-custom-input [control]="form.controls.specialAttack" type="number" label="Ataque Especial"></app-custom-input>
+      <app-custom-input [control]="form.controls.specialDefense" type="number" label="Defensa Especial"></app-custom-input>
+      <app-custom-input [control]="form.controls.speed" type="number" label="Velocidad"></app-custom-input>
 
       <ion-button (click)="submit()" mode="ios" expand="block" class="submit" type="submit" [disabled]="form.invalid">
-        {{miniature? 'Editar miniatura': 'Añadir miniatura'}}
+        {{ miniature ? 'Editar miniatura' : 'Añadir miniatura' }}
         <ion-icon slot="end" name="body-outline"></ion-icon>
       </ion-button>
     </form>

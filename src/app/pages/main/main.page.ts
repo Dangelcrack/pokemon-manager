@@ -60,7 +60,9 @@ export class MainPage implements OnInit {
 
   signOut() {
     this.firebaseService.signOut().then(() => {
-      this.utilsService.routerLink("/auth");
+      this.router.navigate(['/auth']).then(() => {
+        window.location.reload();
+      });
     });
   }
 }
